@@ -11,11 +11,28 @@ function storage:CreateWindow(options)
   local sg = Instance.new("ScreenGui",game.CoreGui)
   sg.Name = "HuXz X"
   local f = Instance.new("Frame",sg)
-  f.Size = UDim2.new(0.5,0,0.94,0)
+  f.Size = UDim2.new(0.5,0,0.98,0)
   center(f)
-  f.BackgroundColor3 = Color3.fromRGB(20,20,20)
-  f.BorderSizePixel = 0
+  f.BackgroundTransparency = 1
   f.Active,f.Draggable = true,true
+  local f_ = Instance.new("Frame",f)
+  f_.Size = UDim2.new(1,0,0.1,0)
+  f_.Position = UDim2.new(0,0,0,0)
+  f_.BackgroundColor3 = Color3.fromRGB(20,20,20)
+  f_.BorderSizePixel = 0
+  local f_0 = Instance.new("Frame",f)
+  f_0.Size = UDim2.new(1,0,0.9,0)
+  f_0.Position = UDim2.new(0,0,0.1,0)
+  f_0.BackgroundColor3 = Color3.fromRGB(20,20,20)
+  f_0.BorderSizePixel = 0
+  local tl = Instance.new("TextLabel",f_)
+  tl.Size = UDim2.new(0.3,0,1,0)
+  tl.BackgroundTransparency = 0.9
+  tl.Text = title
+  tl.TextWrapped,tl.TextScaled = true,true
   table.insert(storage,sg)
 end
+storage:CreateWindow({
+  Title = "Test"
+})
 return storage
