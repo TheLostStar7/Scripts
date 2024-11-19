@@ -15,6 +15,7 @@ function storage:CreateWindow(options)
   center(f)
   f.BackgroundColor3 = Color3.fromRGB(50,50,50)
   f.BorderSizePixel = 0
+  f.Active,f.Draggable = true,true
   table.insert(storage,sg)
 end
 return storage
