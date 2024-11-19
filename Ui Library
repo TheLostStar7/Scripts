@@ -14,7 +14,7 @@ function storage:CreateWindow(options)
   f.Size = UDim2.new(0.6,0,0.78,0)
   center(f)
   f.BackgroundColor3 = Color3.fromRGB(50,50,50)
-  f.BoardSizePixel = 0
+  f.BorderSizePixel = 0
   table.insert(storage,sg)
   sg.Parent = game:GetService("ReplicatedStorage")
 end
