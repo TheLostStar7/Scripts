@@ -1,0 +1,21 @@
+local storage = {}
+function storage:CreateWindow(options)
+  local title
+  if options.Title and options.Title ~= "" then title = options.Title else title = "Welcome User | " .. game.Players.LocalPlayer.Name
+  end
+  function center(f)
+    local size = game:GetService("Workspace").CurrentCamera.ViewportSize
+    f.Position = UDim2.new(0.5,-f.Size.X.Offset/2,0.5,-f.Size.Y.Offset/2)
+    f.AnchorPoint = Vector2.new(0.5,0.5)
+  end
+  local sg = Instance.new("ScreenGui")
+  sg.Name = "HuXz X"
+  local f = Instance.new("Frame",sg)
+  f.Size = UDim2.new(0.6,0,0.78,0)
+  center(f)
+  f.BackgroundColor3 = Color3.fromRGB(50,50,50)
+  f.BoarderSizePixel = 0
+  table.insert(storage,sg)
+  sg.Parent = game:GetService("ReplicatedStorage")
+end
+return storage
