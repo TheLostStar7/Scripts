@@ -1,8 +1,6 @@
 local storage = {}
 function storage:CreateWindow(options)
-  local title
-  if options.Title and options.Title ~= "" then title = options.Title else title = "Welcome User | " .. game.Players.LocalPlayer.Name
-  end
+  local title = options.Title and options.Title ~= "" and options.Title or "Welcome User | " .. game.Players.LocalPlayer.Name
   function center(f)
     local size = game:GetService("Workspace").CurrentCamera.ViewportSize
     f.Position = UDim2.new(0.5,-f.Size.X.Offset/2,0.5,-f.Size.Y.Offset/2)
@@ -21,27 +19,54 @@ function storage:CreateWindow(options)
   f_.BackgroundColor3 = Color3.fromRGB(27,27,27)
   f_.BorderSizePixel = 0
   local f_0 = Instance.new("Frame",f)
-  f_0.Size = UDim2.new(1,0,0.9,0)
-  f_0.Position = UDim2.new(0,0,0.1,0)
+  f_0.Size = UDim2.new(0.7,0,0.9,0)
+  f_0.Position = UDim2.new(0.3,0,0.1,0)
   f_0.BackgroundColor3 = Color3.fromRGB(27,27,27)
   f_0.BorderSizePixel = 0
+  local f_1 = Instance.new("Frame",f)
+  f_1.Size = UDim2.new(0.3,0,0.9,0)
+  f_1.Position = UDim2.new(0,0,0.1,0)
+  f_1.BackgroundColor3 = Color3.fromRGB(27,27,27)
+  f_1.BorderSizePixel = 0
   local tl = Instance.new("TextLabel",f_)
-  tl.Size = UDim2.new(0.4,0,1,0)
-  tl.Position = UDim2.new(0.045,0,0,0)
+  tl.Size = UDim2.new(0.4,0,0.8,0)
+  tl.Position = UDim2.new(0.016,0,0.1,0)
   tl.BackgroundTransparency = 1
   tl.Text = title
-  tl.TextColor3 = Color3.fromRGB(192,192,192)
+  tl.TextColor3 = Color3.fromRGB(255,255,255)
   tl.TextWrapped,tl.TextScaled = true,true
   tl.TextXAlignment = Enum.TextXAlignment.Left
-  local f_1 = Instance.new("Frame",f_)
-  f_1.Size = UDim2.new(1,0,0.05,0)
-  f_1.Position = UDim2.new(0,0,0.95,0)
-  f_1.BackgroundColor3 = Color3.fromRGB(46,46,46)
-  f_1.BorderSizePixel = 0
-  local f_2 = Instance.new("Frame",f)
-  f_2.Size = UDim2.new(0.1,0,0.12,0)
-  f_2.Position = UDim2.new(0.9,0,0.88,0)
-  f_2.BackgroundTransparency = 0.9
-  table.insert(storage,sg)
+  local f_2 = Instance.new("Frame",f_)
+  f_2.Size = UDim2.new(1,0,0.05,0)
+  f_2.Position = UDim2.new(0,0,0.95,0)
+  f_2.BackgroundColor3 = Color3.fromRGB(46,46,46)
+  f_2.BorderSizePixel = 0
+  local f_3 = Instance.new("Frame",f_1)
+  f_3.Size = UDim2.new(0.018,0,1,0)
+  f_3.Position = UDim2.new(0.99,0,0,0)
+  f_3.BackgroundColor3 = Color3.fromRGB(46,46,46)
+  f_3.BorderSizePixel = 0
+  local tbtn = Instance.new("TextButton",sg)
+  tbtn.Size = UDim2.new(0.1,0,0.1,0)
+  tbtn.Position = UDim2.new(0.08,-19,0.1,-29)
+  tbtn.Text = "Close/Open"
+  tbtn.TextColor3 = Color3.fromRGB(255,255,255)
+  tbtn.TextWrapped,tbtn.TextScaled,tbtn.Active,tbtn.Draggable = true,true,true,true
+  tbtn.BackgroundColor3 = Color3.fromRGB(27,27,27)
+  tbtn.MouseButton1Click:Connect(function()
+    f.Visible = not f.Visible
+  end)
+  local tbtn_ = Instance.new("TextButton",f_)
+  tbtn_.Size = UDim2.new(0.05,0,0.6,0)
+  tbtn_.Position = UDim2.new(0.92,0,0.2,0)
+  tbtn_.Text = "X"
+  tbtn_.TextColor3 = Color3.fromRGB(255,255,255)
+  tbtn_.TextWrapped,tbtn.TextScaled,tbtn.Active,tbtn.Draggable = true,true,true,true
+  tbtn_.BackgroundColor3 = Color3.fromRGB(27,27,27)
+  tbtn_.BorderColor3 = Color3.fromRGB(46,46,46)
+  tbtn_.MouseButton1Click:Connect(function()
+    sg:Destroy()
+  end)
+  table.insert(storage,{sg,f,tbtn})
 end
 return storage
