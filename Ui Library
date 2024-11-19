@@ -27,10 +27,10 @@ function storage:CreateWindow(options)
   f_0.BorderSizePixel = 0
   local tl = Instance.new("TextLabel",f_)
   tl.Size = UDim2.new(0.4,0,1,0)
-  tl.Position = UDim2.new(0.045,0,0,0)
+  tl.Position = UDim2.new(0.02,0,0,0)
   tl.BackgroundTransparency = 1
   tl.Text = title
-  tl.TextColor3 = Color3.fromRGB(53,56,57)
+  tl.TextColor3 = Color3.fromRGB(192,192,192)
   tl.TextWrapped,tl.TextScaled = true,true
   tl.TextXAlignment = Enum.TextXAlignment.Left
   table.insert(storage,sg)
