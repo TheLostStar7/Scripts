@@ -11,9 +11,9 @@ function storage:CreateWindow(options)
   local sg = Instance.new("ScreenGui",game.CoreGui)
   sg.Name = "HuXz X"
   local f = Instance.new("Frame",sg)
-  f.Size = UDim2.new(0.6,0,0.78,0)
+  f.Size = UDim2.new(0.5,0,0.94,0)
   center(f)
-  f.BackgroundColor3 = Color3.fromRGB(50,50,50)
+  f.BackgroundColor3 = Color3.fromRGB(20,20,20)
   f.BorderSizePixel = 0
   f.Active,f.Draggable = true,true
   table.insert(storage,sg)
