@@ -1,0 +1,115 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/TheLostStar7/-back-ups-for-libs/refs/heads/main/rodus"))()
+CreateMain("Coal Hub | The Lost Star")
+CreateTab("Main Tab")
+local esp = {
+  MeteorsEsp = false,
+  CrystalsEsp = false,
+  GodsEsp = false,
+  ChestsEsp = false,
+  TribesEsp = false
+}
+local chams_table = {}
+CreateSideDropToggle(tabs['Main Tab'],"Esp",{"Meteors Esp","Crystals Esp","Gods Esp","Chests Esp","Tribes Esp"},function(v)
+  esp.MeteorsEsp = v == "Meteors Esp"
+  esp.CrystalsEsp = v == "Crystals Esp"
+  esp.GodsEsp = v == "Gods Esp"
+  esp.ChestsEsp = v == "Chests Esp"
+  esp.TribesEsp = v == "Tribes Esp"
+  function addchams(object,color,text,toggle)
+    if toggle then
+      local hi = Instance.new("Highlight",object)
+      hi.FillColor,hi.OutlineColor,hi.Adornee = color,color,object
+      local bbg = Instance.new("BillboardGui",object)
+      bbg.Size,bbg.AlwaysOnTop,bbg.Adornee = UDim2.new(4,0,1,0),true,object
+      local tl = Instance.new("TextLabel",bbg)
+      tl.Size,tl.Text,tl.TextColor3,tl.TextSize,tl.BackgroundTransparency = UDim2.new(1,0,1,0),text,color,10,1
+      chams_table[object] = {Highlight = hi,BillboardGui = bbg}
+    elseif chams_table[object] then
+      if chams_table[object].Highlight then chams_table[object].Highlight:Destroy() end
+      if chams_table[object].BillboardGui then chams_table[object].BillboardGui:Destroy() end
+      chams_table[object] = nil
+    end
+  end
+  if esp.MeteorsEsp then
+    for _, meteor in ipairs(workspace:GetChildren()) do
+      if meteor.Name:match("Meteor Core") then
+        addchams(meteor,meteor.Color,meteor.Name,true)
+      end
+    end
+    workspace.ChildAdded:Connect(function(meteor)
+      if meteor.Name:match("Meteor Core") then
+        addchams(meteor,meteor.Color,meteor.Name,true)
+      end
+    end)
+  end
+  if esp.CrystalsEsp then
+    for _, crystal in ipairs(workspace.Map.Resources["Crystal Lode"]:GetChildren()) do
+      if crystal:FindFirstChild("Core") then
+        addchams(crystal,crystal.Core.Color,crystal.Name,esp.CrystalsEsp)
+      end
+    end
+    workspace.Map.Resources["Crystal Lode"].ChildAdded:Connect(function(crystal)
+      if crystal:FindFirstChild("Core") then
+        addchams(crystal,crystal.Core.Color,crystal.Name,esp.CrystalsEsp)
+      end
+    end)
+    for _, guardian in ipairs(workspace.Map.Map.Misc:GetChildren()) do
+      if guardian:FindFirstChild("Crystal Guardian") then
+        addchams(guardian["Crystal Guardian"],guardian["Crystal Guardian"].Color,"Crystal Guardian",esp.CrystalsEsp)
+      end
+    end
+    workspace.Map.Map.Misc.ChildAdded:Connect(function(guardian)
+      if guardian:FindFirstChild("Crystal Guardian") then
+        addchams(guardian["Crystal Guardian"],guardian["Crystal Guardian"].Color,"Crystal Guardian",esp.CrystalsEsp)
+      end
+    end)
+  end
+  if esp.GodsEsp then
+    for _, god in ipairs(workspace.Map.Resources.Gods:GetChildren()) do
+      local god = god:FindFirstChild("Moai") or god:FindFirstChild("Totem") or god:FindFirstChild("Ice")
+      if god then
+        addchams(god,god.Color,god.Name,esp.GodsEsp)
+      end
+    end
+    workspace.Map.Resources.Gods.ChildAdded:Connect(function(god)
+      local god = god:FindFirstChild("Moai") or god:FindFirstChild("Totem") or god:FindFirstChild("Ice")
+      if god then
+        addchams(god,god.Color,god.Name,esp.GodsEsp)
+      end
+    end)
+  end
+  if esp.ChestsEsp then
+    for _, chest in ipairs(workspace.Map.Resources["Old Chests"]:GetChildren()) do
+      if chest:FindFirstChild("Base") then
+        addchams(chest,chest.Base.Color,chest.Name,esp.ChestsEsp)
+      end
+    end
+    workspace.Map.Resources["Old Chests"].ChildAdded:Connect(function(chest)
+      if chest:FindFirstChild("Base") then
+        addchams(chest,chest.Base.Color,chest.Name,esp.ChestsEsp)
+      end
+    end)
+    for _, chest in ipairs(workspace:GetChildren()) do
+      if chest.Name == "Treasure Chest" and chest:FindFirstChild("Base") then
+        addchams(chest,chest.Base.Color,chest.Name,esp.ChestsEsp)
+      end
+    end
+    workspace.ChildAdded:Connect(function(chest)
+      if chest.Name == "Treasure Chest" and chest:FindFirstChild("Base") then
+        addchams(chest,chest.Base.Color,chest.Name,esp.ChestsEsp)
+      end
+    end)
+  end
+  if esp.TribesEsp then
+    for _, tribe in ipairs(workspace.Important.Totems:GetChildren()) do
+      if tribe:FindFirstChild("Coloration") then
+        addchams(tribe,tribe.Coloration.Color,tribe.TribeColor.Value,esp.TribesEsp)
+      end
+    end
+    workspace.Important.Totems.ChildAdded:Connect(function(tribe)
+      if tribe:FindFirstChild("Coloration") then
+        addchams(tribe,tribe.Coloration.Color,tribe.TribeColor.Value,esp.TribesEsp)
+      end
+    end)
+  end
+end)
