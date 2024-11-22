@@ -1,0 +1,18 @@
+local function obfuscate(source)
+    local obfuscated = ""
+    for i = 1, #source do
+        local char = source:sub(i, i)
+        obfuscated = obfuscated .. "\" .. string.byte(char)
+    end
+    return obfuscated
+end
+local function copyToClipboard(text)
+    local copyFunction = 'echo ' .. text .. '| clip'
+    os.execute(copyFunction)
+end
+local combinedCode = table.concat(code,"")
+local obfuscatedCode = obfuscate(combinedCode)
+copyToClipboard(obfuscatedCode)
+if enable.execute then
+    loadstring(combinedCode)()
+end
