@@ -1,72 +1,146 @@
-local storage = {}
-function storage:CreateWindow(options)
-  local title = options.Title and options.Title ~= "" and options.Title or "Welcome User | " .. game.Players.LocalPlayer.Name
-  function center(f)
-    local size = game:GetService("Workspace").CurrentCamera.ViewportSize
-    f.Position = UDim2.new(0.5,-f.Size.X.Offset/2,0.5,-f.Size.Y.Offset/2)
-    f.AnchorPoint = Vector2.new(0.5,0.5)
+local function Create(instance,properties,children)
+  local obj = Instance.new(instance)
+  for i,v in pairs(properties or {}) do
+    obj[i] = v
   end
-  local sg = Instance.new("ScreenGui",game.CoreGui)
-  sg.Name = "HuXz X"
-  local f = Instance.new("Frame",sg)
-  f.Size = UDim2.new(0.5,0,0.98,0)
-  center(f)
-  f.BackgroundTransparency = 1
-  f.Active,f.Draggable = true,true
-  local f_ = Instance.new("Frame",f)
-  f_.Size = UDim2.new(1,0,0.1,0)
-  f_.Position = UDim2.new(0,0,0,0)
-  f_.BackgroundColor3 = Color3.fromRGB(27,27,27)
-  f_.BorderSizePixel = 0
-  local f_0 = Instance.new("Frame",f)
-  f_0.Size = UDim2.new(0.7,0,0.9,0)
-  f_0.Position = UDim2.new(0.3,0,0.1,0)
-  f_0.BackgroundColor3 = Color3.fromRGB(27,27,27)
-  f_0.BorderSizePixel = 0
-  local f_1 = Instance.new("Frame",f)
-  f_1.Size = UDim2.new(0.3,0,0.9,0)
-  f_1.Position = UDim2.new(0,0,0.1,0)
-  f_1.BackgroundColor3 = Color3.fromRGB(27,27,27)
-  f_1.BorderSizePixel = 0
-  local tl = Instance.new("TextLabel",f_)
-  tl.Size = UDim2.new(0.4,0,0.8,0)
-  tl.Position = UDim2.new(0.016,0,0.1,0)
-  tl.BackgroundTransparency = 1
-  tl.Text = title
-  tl.TextColor3 = Color3.fromRGB(255,255,255)
-  tl.TextWrapped,tl.TextScaled = true,true
-  tl.TextXAlignment = Enum.TextXAlignment.Left
-  local f_2 = Instance.new("Frame",f_)
-  f_2.Size = UDim2.new(1,0,0.05,0)
-  f_2.Position = UDim2.new(0,0,0.95,0)
-  f_2.BackgroundColor3 = Color3.fromRGB(46,46,46)
-  f_2.BorderSizePixel = 0
-  local f_3 = Instance.new("Frame",f_1)
-  f_3.Size = UDim2.new(0.018,0,1,0)
-  f_3.Position = UDim2.new(0.99,0,0,0)
-  f_3.BackgroundColor3 = Color3.fromRGB(46,46,46)
-  f_3.BorderSizePixel = 0
-  local tbtn = Instance.new("TextButton",sg)
-  tbtn.Size = UDim2.new(0.1,0,0.1,0)
-  tbtn.Position = UDim2.new(0.08,-19,0.1,-29)
-  tbtn.Text = "Close/Open"
-  tbtn.TextColor3 = Color3.fromRGB(255,255,255)
-  tbtn.TextWrapped,tbtn.TextScaled,tbtn.Active,tbtn.Draggable = true,true,true,true
-  tbtn.BackgroundColor3 = Color3.fromRGB(27,27,27)
-  tbtn.MouseButton1Click:Connect(function()
-    f.Visible = not f.Visible
-  end)
-  local tbtn_ = Instance.new("TextButton",f_)
-  tbtn_.Size = UDim2.new(0.05,0,0.6,0)
-  tbtn_.Position = UDim2.new(0.92,0,0.2,0)
-  tbtn_.Text = "X"
-  tbtn_.TextColor3 = Color3.fromRGB(255,255,255)
-  tbtn_.TextWrapped,tbtn.TextScaled,tbtn.Active,tbtn.Draggable = true,true,true,true
-  tbtn_.BackgroundColor3 = Color3.fromRGB(27,27,27)
-  tbtn_.BorderColor3 = Color3.fromRGB(46,46,46)
-  tbtn_.MouseButton1Click:Connect(function()
-    sg:Destroy()
-  end)
-  table.insert(storage,{sg,f,tbtn})
+  for _, child in pairs(children or {}) do
+    child.Parent = obj
+  end
+  return obj
 end
-return storage
+
+local GUI = {}
+local Elements = {
+  DataBase = {
+    info = {},
+    flag = {}
+  },
+  ElementData = {
+    tabs = {},
+    btns = {},
+    tgls = {},
+    slidrs = {},
+    keybinds = {},
+    dropdowns = {},
+    menu = {}
+  }
+}
+
+local ts = game:GetService("TweenService")
+local uis = game:GetService("UserInputService")
+local vps = workspace.CurrentCamera.ViewportSize
+
+function GUI:CreateWindow(options)
+  repeat wait() until game:IsLoaded()
+  local premium = options.Premium
+  local sg = Create("ScreenGui",{
+    IgnoreGuiInset = true,
+    Parent = game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui")
+  })
+  local f = Create("Frame",{
+    Size = UDim2.fromOffset(400,300),
+    Position = UDim2.fromOffset((vps.X-400)/2,(vps.Y-300)/2),
+    BackgroundColor3 = Color3.fromRGB(20,20,20),
+    BorderSizePixel = 0,
+    Active = true,
+    Parent = sg
+  })
+  local f_ = Create("Frame",{
+    Size = UDim2.fromScale(0.989,0.985),
+    Position = UDim2.fromScale(0.005,0.008),
+    BackgroundColor3 = Color3.fromRGB(48,48,48),
+    BorderSizePixel = 0,
+    Active = true,
+    Parent = f
+  })
+  local f_0 = Create("Frame",{
+    Size = UDim2.fromScale(0.989,0.985),
+    Position = UDim2.fromScale(0.005,0.008),
+    BackgroundColor3 = Color3.fromRGB(30,30,30),
+    BorderSizePixel = 0,
+    Parent = f_
+  })
+  local f_1 = Create("Frame",{
+    Size = UDim2.new(1,0,0,30),
+    BackgroundColor3 = Color3.fromRGB(25,25,25),
+    BorderSizePixel = 0,
+    Parent = f_0
+  })
+  local tl = Create("TextLabel",{
+    Size = UDim2.fromScale(0.5,1),
+    TextColor3 = Color3.fromRGB(224,224,224),
+    Text = options.Name,
+    TextSize = 18.00,
+    Font = Enum.Font.Gotham,
+    TextXAlignment = Enum.TextXAlignment.Left,
+    BackgroundTransparency = 1,
+    Parent = f_1
+  })
+  local uip = Create("UIPadding",{
+    PaddingLeft = UDim.new(0,8),
+    Parent = tl
+  })
+  local tabf = Create("Frame",{
+    Size = UDim2.new(0.5,0,0,30),
+    Position = UDim2.fromScale(0.5,0),
+    BackgroundColor3 = Color3.fromRGB(19,19,19),
+    BorderSizePixel = 0,
+    Parent = f_1
+  })
+  local uillo = Create("UIListLayout",{
+    Padding = UDim.new(0,4),
+    FillDirection = Enum.FillDirection.Horizontal,
+    SortOrder = Enum.SortOrder.LayoutOrder,
+    VerticalAlignment = Enum.VerticalAlignment.Center,
+    Parent = tabf
+  })
+  local uip = Create("UIPadding",{
+    PaddingLeft = UDim.new(0,4),
+    Parent = tabf
+  })
+  function GUI:CreateTab(options)
+    local tbtnf = Create("Frame",{
+      Size = UDim2.new(0.48,0,0,23),
+      BackgroundColor3 = Color3.fromRGB(25,25,25),
+      BorderSizePixel = 0,
+      Parent = tabf
+    })
+    local tbtn = Create("TextButton",{
+      Size = UDim2.fromScale(1,1),
+      TextColor3 = Color3.fromRGB(167,167,167),
+      Text = options.Name or "Tab",
+      TextSize = 16.00,
+      Font = Enum.Font.Gotham,
+      BackgroundTransparency = 1,
+      Parent = tbtnf
+    })
+    local lf = Create("Frame",{
+      Size = UDim2.fromScale(0.5,0.9),
+      Position = UDim2.fromScale(0,0.1),
+      BackgroundTransparency = 1,
+      Parent = f_0
+    })
+    local rf = Create("Frame",{
+      Size = UDim2.fromScale(0.5,0.9),
+      Position = UDim2.fromScale(0.5,0.1),
+      BackgroundTransparency = 1,
+      Parent = f_0
+    })
+    local istbtn = false
+    tbtn.MouseButton1Click:Connect(function()
+      istbtn = not istbtn
+      if istbtn then
+        ts:Create(tbtn,TweenInfo.new(0.2),{TextColor3 = Color3.fromRGB(255,255,255)}):Play()
+      else
+        ts:Create(tbtn,TweenInfo.new(0.2),{TextColor3 = Color3.fromRGB(167,167,167)}):Play()
+      end
+    end)
+  end
+  function GUI:CreateMenu(options)
+    
+  end
+end
+GUI:CreateWindow({Name = "Hello",Premium = false})
+GUI:CreateTab({Name = "Main Tab"})
+GUI:CreateTab({Name = "Players Tab"})
+return GUI
