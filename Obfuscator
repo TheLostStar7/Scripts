@@ -1,23 +1,7 @@
-local obf = {'print("hello")'}
-local function xor(input,key)
-    local result = {}
-    for i = 1, #input do
-        table.insert(result,string.char(bit32.bxor(string.byte(input,i),key)))
-    end
-    return table.concat(result)
-end
-local encryptionKey = 123
-local encryptedCodes = {}
-for _, code in ipairs(obf) do
-    table.insert(encryptedCodes,xor(code,encryptionKey))
-end
-local function decrypt(encrypted,key)
-    local decrypted = xor(encrypted,key)
-    setclipboard(decrypted)
-    return getfenv()[string.char(108,111,97,100,115,116,114,105,110,103)](decrypted)()
-end
-pcall(function()
-    for _, encCode in ipairs(encryptedCodes) do
-        decrypt(encCode,encryptionKey)
-    end
-end)
+local code = [[
+print("hello world")
+]]
+local obfuscate = ('loadstring(("'.. code:gsub('.',function(c)
+    return "\\"..string.byte(c)
+end)..'"):gsub("\\(%d+)",function(c) return string.char(tonumber(c)) end))()')
+setclipboard(obfuscate)
