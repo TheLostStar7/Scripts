@@ -1,18 +1,23 @@
-local function obfuscate(source)
-    local obfuscated = ""
-    for i = 1, #source do
-        local char = source:sub(i, i)
-        obfuscated = obfuscated .. "\" .. string.byte(char)
+local obf = {'print("hello")'}
+local function xor(input,key)
+    local result = {}
+    for i = 1, #input do
+        table.insert(result,string.char(bit32.bxor(string.byte(input,i),key)))
     end
-    return obfuscated
+    return table.concat(result)
 end
-local function copyToClipboard(text)
-    local copyFunction = 'echo ' .. text .. '| clip'
-    os.execute(copyFunction)
+local encryptionKey = 123
+local encryptedCodes = {}
+for _, code in ipairs(obf) do
+    table.insert(encryptedCodes,xor(code,encryptionKey))
 end
-local combinedCode = table.concat(code,"")
-local obfuscatedCode = obfuscate(combinedCode)
-copyToClipboard(obfuscatedCode)
-if enable.execute then
-    loadstring(combinedCode)()
+local function decrypt(encrypted,key)
+    local decrypted = xor(encrypted,key)
+    setclipboard(decrypted)
+    return getfenv()[string.char(108,111,97,100,115,116,114,105,110,103)](decrypted)()
 end
+pcall(function()
+    for _, encCode in ipairs(encryptedCodes) do
+        decrypt(encCode,encryptionKey)
+    end
+end)
