@@ -1,7 +1,82 @@
 [[
 huge credits to the creator which is me / the lost star and i'd like to thank everyone who would showcase it and give credits
 ]]
+
+
+
 _G.HeadSize = 15 -- 15 is the recommended hitbox size
 _G.Toggle = true -- switch it on and off whenever you'd like.
 _G.KeyBind = Enum.KeyCode.P -- Changeable
 _G.KeyBoard = "v2" -- u have v1 and v2
+local uis = game:GetService("UserInputService")
+local rs = game:GetService("RunService")
+local plrs = game:GetService("Players")
+local type = game:GetService("UserInputService").TouchEnabled and "Mobile" or "Computer"
+local sizes = {}
+if uis.TouchEnabled then
+    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Device Type";Text = type;Duration = 3;})
+    if _G.KeyBoard == "v1" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt",true))()
+    elseif _G.KeyBoard == "v2" then
+        loadstring(game:HttpGet("https://gist.githubusercontent.com/RedZenXYZ/4d80bfd70ee27000660e4bfa7509c667/raw/da903c570249ab3c0c1a74f3467260972c3d87e6/KeyBoard%2520From%2520Ohio%2520Fr%2520Fr"))()
+    end
+    uis.InputBegan:Connect(function(input,processed)
+        if processed then return end
+        if input.KeyCode == _G.KeyBind then
+            _G.Toggle = not _G.Toggle
+            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "HitBox Expander";Text = ((_G.Toggle and "Disabled" or "Enabled"));Duration = 3;})
+        end
+    end)
+    rs.RenderStepped:Connect(function()
+        for _,players in ipairs(plrs:GetPlayers()) do
+            if players ~= game:GetService("Players").LocalPlayer then
+                local hrp = players.Character:FindFirstChild("HumanoidRootPart")
+                sizes[player.Name] = sizes[player.Name] or hrp.Size
+                pcall(function()
+                    if players.Character:FindFirstChild("Humanoid") and hrp and players.Character.Humanoid.Health < 5 or _G.Toggle then
+                        hrp.Size = sizes[players.Name]
+                        hrp.Transparency = 1
+                        hrp.CanCollide = true
+                    else
+                        hrp.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+                        hrp.Transparency = 0.7
+                        hrp.BrickColor = BrickColor.new("Dark indigo")
+                        hrp.Material = Enum.Material.Neon
+                        hrp.CanCollide = false
+                    end
+                end)
+            end
+        end
+    end)
+elseif uis.KeyboardEnabled and uis.MouseEnabled then
+    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Device Type";Text = type;Duration = 3;})
+    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "HitBox Expander";Text = "The KeyBind Is P";Duration = 3;})
+    uis.InputBegan:Connect(function(input,processed)
+        if processed then return end
+        if input.KeyCode == _G.KeyBind then
+            _G.Toggle = not _G.Toggle
+            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "HitBox Expander";Text = ((_G.Toggle and "Disabled" or "Enabled"));Duration = 3;})
+        end
+    end)
+    rs.RenderStepped:Connect(function()
+        for _,players in ipairs(plrs:GetPlayers()) do
+            if players ~= game:GetService("Players").LocalPlayer then
+                local hrp = players.Character:FindFirstChild("HumanoidRootPart")
+                sizes[player.Name] = sizes[player.Name] or hrp.Size
+                pcall(function()
+                    if players.Character:FindFirstChild("Humanoid") and hrp and players.Character.Humanoid.Health < 5 or _G.Toggle then
+                        hrp.Size = sizes[players.Name]
+                        hrp.Transparency = 1
+                        hrp.CanCollide = true
+                    else
+                        hrp.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+                        hrp.Transparency = 0.7
+                        hrp.BrickColor = BrickColor.new("Dark indigo")
+                        hrp.Material = Enum.Material.Neon
+                        hrp.CanCollide = false
+                    end
+                end)
+            end
+        end
+    end)
+end
