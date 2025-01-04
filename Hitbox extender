@@ -1,0 +1,7 @@
+[[
+huge credits to the creator which is me / the lost star and i'd like to thank everyone who would showcase it and give credits
+]]
+_G.HeadSize = 15 -- 15 is the recommended hitbox size
+_G.Toggle = true -- switch it on and off whenever you'd like.
+_G.KeyBind = Enum.KeyCode.P -- Changeable
+_G.KeyBoard = "v2" -- u have v1 and v2
