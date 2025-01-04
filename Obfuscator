@@ -1,7 +1,0 @@
-local code = [[
-print("hello world")
-]]
-local obfuscate = ('loadstring(("'.. code:gsub('.',function(c)
-    return "\\"..string.byte(c)
-end)..'"):gsub("\\(%d+)",function(c) return string.char(tonumber(c)) end))()')
-setclipboard(obfuscate)
