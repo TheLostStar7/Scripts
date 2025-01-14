@@ -1,6 +1,6 @@
 local ui = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 ui:Notify({Title = "Nyx Notify",Content = "Thanks For Using Nyx Hub",Duration = 10,})
-local win = ui:CreateWindow({Name = "Nyx Hub | By Gggg",Icon = 0,LoadingTitle = "Loading",LoadingSubtitle = "",Theme = "Amethyst",DisableRayfieldPrompts = true,DisableBuildWarnings = true,ConfigurationSaving = {Enabled = true,FolderName = "Configs",FileName = "Default"},Discord = {Enabled = false,Invite = "noinvitelink",RememberJoins = true},KeySystem = false,KeySettings = {Title = "Untitled",Subtitle = "Key System",Note = "No method of obtaining the key is provided",FileName = "Key",SaveKey = true,GrabKeyFromSite = false,Key = {"Hello"}}})
+local win = ui:CreateWindow({Name = "Nyx Hub | By theloststar0802",Icon = 0,LoadingTitle = "Loading",LoadingSubtitle = "",Theme = "Amethyst",DisableRayfieldPrompts = true,DisableBuildWarnings = true,ConfigurationSaving = {Enabled = true,FolderName = "Configs",FileName = "Default"},Discord = {Enabled = false,Invite = "noinvitelink",RememberJoins = true},KeySystem = false,KeySettings = {Title = "Untitled",Subtitle = "Key System",Note = "No method of obtaining the key is provided",FileName = "Key",SaveKey = true,GrabKeyFromSite = false,Key = {"Hello"}}})
 local bypass;
 bypass = hookmetamethod(game,"__namecall",function(method,...)
   if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Ban then
