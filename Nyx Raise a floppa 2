@@ -1,0 +1,94 @@
+local Ui = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() or loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/ab965bf9a6f9890e6447c9b377678f5bffd8a379/source.lua'))()
+Ui:Notify({Title = "Nyx Notify",Content = "Thanks For Using Nyx Hub",Duration = 10,})
+local Win = Ui:CreateWindow({Name = "Nyx Hub | Beta By theloststar0802",Icon = 0,LoadingTitle = "Loading",LoadingSubtitle = "",Theme = "Amethyst",DisableRayfieldPrompts = true,DisableBuildWarnings = true,ConfigurationSaving = {Enabled = true,FolderName = "Configs",FileName = "Default"},Discord = {Enabled = false,Invite = "noinvitelink",RememberJoins = true},KeySystem = false,KeySettings = {Title = "Untitled",Subtitle = "Key System",Note = "No method of obtaining the key is provided",FileName = "Key",SaveKey = true,GrabKeyFromSite = false,Key = {"Hello"}}})
+local Tabs = {
+  ["Main Tab"] = Win:CreateTab("Main Tab")
+}
+Tabs["Main Tab"]:CreateSection("Main Section")
+
+
+
+Tabs["Main Tab"]:CreateSection("Farm Section")
+_G.AutoPick = false
+_G.AutoClick = false
+_G.AutoClean = false
+_G.AutoFeed = false
+local function collect()
+  for _, v in next,workspace:GetChildren() do
+    if v.Name == "Money" or v.Name == "Money Bag" then
+      firetouchinterest(v,game.Players.LocalPlayer.Character.HumanoidRootPart,0)
+    end
+  end
+end
+local function click()
+    for _,v in next,workspace:GetChildren() do
+        if v:FindFirstChild("ClickDetector") then
+            fireclickdetector(v.ClickDetector)
+            task.wait()
+        end
+    end
+end
+local function clean()
+    local pos = game.Players.LocalPlayer.Character:GetPivot().Position
+    for _, v in next,workspace:GetChildren() do
+        if v.Name == "Poop" then
+            game.Players.LocalPlayer.Character:MoveTo(v:GetPivot().Position)
+            task.wait(0.1)
+            fireproximityprompt(v.ProximityPrompt,0)
+            task.wait(0.04)
+        end
+    end
+    for _, v in next,workspace["Key Parts"]["Litter Box"]:GetChildren() do
+        if v.Name == "Poop" then
+            game.Players.LocalPlayer.Character:MoveTo(v:GetPivot().Position)
+            task.wait(0.1)
+            fireproximityprompt(v.ProximityPrompt,0)
+            task.wait(0.04)
+        end
+    end
+    game.Players.LocalPlayer.Character:MoveTo(pos)
+    task.wait(0.1)
+    game.Players.LocalPlayer.Character.Humanoid.Sit = false
+end
+Tabs["Main Tab"]:CreateToggle({Name = "Auto Pick Up Money",CurrentValue = false,Flag = "Auto Pick Up Money",Callback = function(v)
+  _G.AutoPick = v
+  if _G.AutoPick then
+    while _G.AutoPick and task.wait(0.1) do
+      collect()
+    end
+  end
+end})
+Tabs["Main Tab"]:CreateToggle({Name = "Auto Farm Money",CurrentValue = false,Flag = "Auto Farm Money",Callback = function(v)
+  _G.AutoClick = v
+  if _G.AutoClick then
+    while _G.AutoClick and task.wait(0.1) do
+      click()
+    end
+  end
+end})
+Tabs["Main Tab"]:CreateToggle({Name = "Auto Clean",CurrentValue = false,Flag = "Auto Clean",Callback = function(v)
+  _G.AutoClean = v
+  if _G.AutoClean then
+    while _G.AutoClean and task.wait(0.1) do
+      clean()
+    end
+  end
+end})
+Tabs["Main Tab"]:CreateToggle({Name = "Auto Feed",CurrentValue = false,Flag = "Auto Feed",Callback = function(v)
+  _G.AutoFeed = v
+  _G.Feed = false
+  local function feed()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace["Key Parts"].Bowl.Part.CFrame
+    game.ReplicatedStorage.Events.Unlock:FireServer("Floppa Food","the_interwebs")
+    fireproximityprompt(workspace["Key Parts"].Bowl.Part.ProximityPrompt,0)
+  end
+  while _G.AutoFeed and task.wait() do
+    if workspace.Floppa.Configuration.Hunger.Value <= 5 and workspace["Key Parts"].Bowl.Part.Transparency >= 0 then
+      _G.Feed = true
+      break
+    end
+  end
+  if _G.Feed then
+    feed()
+  end
+end})
