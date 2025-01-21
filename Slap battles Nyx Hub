@@ -1,6 +1,6 @@
 local ui = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 ui:Notify({Title = "Nyx Notify",Content = "Thanks For Using Nyx Hub",Duration = 10,})
-local win = ui:CreateWindow({Name = "Nyx Hub | By Gggg",Icon = 0,LoadingTitle = "Loading",LoadingSubtitle = "",Theme = "Amethyst",DisableRayfieldPrompts = true,DisableBuildWarnings = true,ConfigurationSaving = {Enabled = true,FolderName = "Configs",FileName = "Default"},Discord = {Enabled = false,Invite = "noinvitelink",RememberJoins = true},KeySystem = false,KeySettings = {Title = "Untitled",Subtitle = "Key System",Note = "No method of obtaining the key is provided",FileName = "Key",SaveKey = true,GrabKeyFromSite = false,Key = {"Hello"}}})
+local win = ui:CreateWindow({Name = "Nyx Hub | By theloststar0802",Icon = 0,LoadingTitle = "Loading",LoadingSubtitle = "",Theme = "Amethyst",DisableRayfieldPrompts = true,DisableBuildWarnings = true,ConfigurationSaving = {Enabled = true,FolderName = "Configs",FileName = "Default"},Discord = {Enabled = false,Invite = "noinvitelink",RememberJoins = true},KeySystem = false,KeySettings = {Title = "Untitled",Subtitle = "Key System",Note = "No method of obtaining the key is provided",FileName = "Key",SaveKey = true,GrabKeyFromSite = false,Key = {"Hello"}}})
 local mt = getrawmetatable(game)
 setreadonly(mt,false)
 mt.__call = function(o,...)
@@ -26,8 +26,7 @@ local locals = {
     Brick = false,
     CoolDown = false,
     Tycoon = false,
-    Boxer = false,
-    
+    Boxer = false
 }
 local connections = {
     Stun,
@@ -214,12 +213,9 @@ Tabs["Main Tab"]:CreateToggle({Name = "Auto Click Tycoon",CurrentValue = false,F
         end
     end
 end,})
-Tabs["Main Tab"]:CreateToggle({Name = "Auto Farm Slaps { Boxer Required } [Fast]",CurrentValue = false,Flag = "Gain Pillow Points",Callback = function(v)
-    locals.Boxer = v
-    while locals.Boxer do
-        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Boxing"):FireServer(game:GetService("Players").LocalPlayer,true)
-        task.wait()
-    end
+Tabs["Main Tab"]:CreateButton({Name = "Boxer Slap Farmer {DonjoScripts} [Fast]",Callback = function()
+    DurationTimeSHOP = math.huge
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/DonjoScripts/Public-Scripts/refs/heads/Slap-Battles/Boxer-slap-farm"))()
 end,})
 Tabs["Main Tab"]:CreateSection("Troll Section")
 Tabs["Main Tab"]:CreateToggle({Name = "Stun Aura",CurrentValue = false,Flag = "Stun Aura",Callback = function(c)
@@ -271,4 +267,8 @@ Tabs["Main Tab"]:CreateButton({Name = "Invisibility",Callback = function()
             end
         end
     else
-        game:GetService("StarterGui"):SetCore("SendNotification",{
+        game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Nyx Hub | Error",Text = "You Have To Be In The Lobby",Duration = 10})
+    end
+end,})
+
+Tabs[
