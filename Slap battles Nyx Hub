@@ -26,7 +26,7 @@ local locals = {
     Brick = false,
     CoolDown = false,
     Tycoon = false,
-    Boxer = false
+    
 }
 local connections = {
     Stun,
