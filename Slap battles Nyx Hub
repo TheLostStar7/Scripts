@@ -252,23 +252,20 @@ Tabs["Main Tab"]:CreateButton({Name = "No CD/CoolDown",Callback = function(v)
     end
 end,})
 Tabs["Main Tab"]:CreateButton({Name = "Invisibility",Callback = function()
-    local glove
     if not game:GetService("Players").LocalPlayer.Character:FindFirstChild("entered") then
         if game:GetService("Players").LocalPlayer.leaderstats.Glove.Value == "Ghost" then
             game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
+        elseif game:GetService("Players").LocalPlayer.leaderstats.Slaps.Value >= 666 then
+            fireclickdetector(workspace.Lobby.Ghost.ClickDetector)
+            game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
+            fireclickdetector(workspace.Lobby[game:GetService("Players").LocalPlayer.leaderstats.Glove.Value].ClickDetector)
         else
-            if game:GetService("Players").LocalPlayer.leaderstats.Slaps.Value >= 666 then
-                glove = game:GetService("Players").LocalPlayer.leaderstats.Glove.Value
-                fireclickdetector(workspace.Lobby.Ghost.ClickDetector)
-                game:GetService("ReplicatedStorage"):WaitForChild("Ghostinvisibilityactivated"):FireServer()
-                fireclickdetector(workspace.Lobby[glove].ClickDetector)
-            else
-                game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Nyx Hub | Error",Text = "You Do Not Have Enough Slaps For The Glove",Duration = 10})
-            end
+            game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Nyx Hub | Error", Text = "You Do Not Have Enough Slaps For The Glove", Duration = 10})
         end
     else
-        game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Nyx Hub | Error",Text = "You Have To Be In The Lobby",Duration = 10})
+        game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Nyx Hub | Error", Text = "You Have To Be In The Lobby", Duration = 10})
     end
 end,})
 
-Tabs[
+Tabs["Change Log"]:CreateSection("Info Section")
+Tabs["Change Log"]:CreateParagraph({Title = "Change Logs",Content = "Updated The Glovel And The Brick And Added The Rest Of The Promised Stuff"})
