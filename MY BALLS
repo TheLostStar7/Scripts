@@ -1,0 +1,37 @@
+local uis = game:GetService("UserInputService")
+local players = game:GetService("Players")
+local cam = workspace.CurrentCamera
+_G.Speed = 70
+uis.InputBegan:Connect(function(input,processed)
+    if processed then return end
+    local char = players.LocalPlayer.Character
+    local ball = workspace:FindFirstChild("Football")
+    if input.KeyCode == Enum.KeyCode.B then
+        if not char or not char:FindFirstChildOfClass("Humanoid") then return end
+        if cam.CameraSubject:IsA("Humanoid") then
+            if ball then
+                cam.CameraSubject = ball
+            elseif char:FindFirstChild("Football") then
+                cam.CameraSubject = char.Football
+            end
+        else
+            cam.CameraSubject = char:FindFirstChildOfClass("Humanoid")
+        end
+    end
+    if input.KeyCode == Enum.KeyCode.K then
+        if not ball then return end
+        local found = ball:FindFirstChild("BodyVelocity")
+        if found then
+            found:Destroy()
+        else
+            local bv = Instance.new("BodyVelocity")
+            bv.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+            bv.Velocity = Vector3.zero
+            bv.Parent = ball
+            game:GetService("RunService").RenderStepped:Connect(function()
+                if not ball or not bv.Parent then return end
+                bv.Velocity = cam.CFrame.LookVector*_G.Speed
+            end)
+        end
+    end
+end)
