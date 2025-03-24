@@ -1,0 +1,35 @@
+repeat task.wait() local basketball = workspace:FindFirstChild("Basketball") if basketball then basketball.Size = Vector3.new(20,20,20) end until basketball and basketball.Size == Vector3.new(20,20,20)
+local uis = game:GetService("UserInputService")
+local players = game:GetService("Players")
+local cam = workspace.CurrentCamera
+local tgl = false
+local connection
+_G.Speed = 70
+uis.InputBegan:Connect(function(input,processed)
+    local char = players.LocalPlayer.Character
+    local basketball = workspace:FindFirstChild("Basketball")
+    if processed then return end
+    if not basketball then return end
+    if input.KeyCode == Enum.KeyCode.B then
+        if cam.CameraSubject:IsA("Humanoid") then
+            cam.CameraSubject = basketball
+        elseif cam.CameraSubject == basketball then
+            cam.CameraSubject = char.Humanoid
+        end
+    end
+    if input.KeyCode == Enum.KeyCode.K then
+        tgl = not tgl
+        if tgl then
+            if not connection then
+                connection = game:GetService("RunService").RenderStepped:Connect(function()
+                    basketball.AssemblyLinearVelocity = cam.CFrame.LookVector*_G.Speed
+                end)
+            end
+        else
+            if connection then
+                connection:Disconnect()
+                connection = nil
+            end
+        end
+    end
+end)
