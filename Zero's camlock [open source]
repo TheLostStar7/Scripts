@@ -1,0 +1,90 @@
+getgenv().Settings = {
+  Camlock = {
+    ["Aim Part"] = "HumanoidRootPart",
+    ["Predition Settings"] = {
+      ["Auto Predition"] = true,
+      Predition = 0.1828
+    },
+  }
+}
+local rs = game:GetService("RunService")
+local ccam = workspace.CurrentCamera
+local target = nil
+local function ccircle(filled,color,transparency)
+  local circle = Drawing.new("Circle")
+  circle.Filled = filled
+  circle.Color = color
+  circle.Thickness = .5
+  circle.NumSides = 80
+  circle.Radius = 80
+  circle.Position = Vector2.new(ccam.ViewportSize.X/2,ccam.ViewportSize.Y/2)
+  circle.Transparency = transparency
+  circle.Visible = true
+  return circle
+end
+local circle = ccircle(true,Color3.fromRGB(255,255,255),.3)
+local circle_ = ccircle(true,Color3.fromRGB(0,0,0),.8)
+circle_.Radius = circle.Radius+2
+local sg = Instance.new("ScreenGui",identifyexecutor and ((gethui and gethui()) or game.CoreGui))
+sg.IgnoreGuiInset = true
+sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local f = Instance.new("Frame",sg)
+f.BackgroundColor3 = Color3.fromRGB(25,25,25)
+f.BorderSizePixel = 0
+f.Position = UDim2.new(0.11680916,0,0.148900136,0)
+f.Size = UDim2.new(0.2,0,0.2,0)
+f.Active = true
+f.Draggable = true
+Instance.new("UICorner",f).CornerRadius = UDim.new(.2,0)
+Instance.new("UIAspectRatioConstraint",f).AspectRatio = 2.8
+local tb = Instance.new("TextButton",f)
+tb.Size = UDim2.new(.8,0,.8,0)
+tb.Position = UDim2.new(.1,0,.1,0)
+tb.BackgroundTransparency = 1
+tb.RichText = true
+tb.Text = "Camlock"
+tb.TextColor3 = Color3.fromRGB(200,200,200)
+tb.TextScaled = true
+tb.TextWrapped = true
+tb.Activated:Connect(function()
+  if target then
+    target = nil
+  else
+    local best,shortest = nil,math.huge
+    for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+      if plr ~= game:GetService("Players").LocalPlayer and plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+        local part = plr.Character:FindFirstChild(getgenv().Settings.Camlock["Aim Part"])
+        if part then
+          local pos,onscreen = ccam:WorldToViewportPoint(part.Position)
+          if onscreen then
+            local dist = (Vector2.new(pos.X,pos.Y)-circle_.Position).Magnitude
+            if dist <= 100 and dist < shortest then
+              best = part
+              shortest = dist
+            end
+          end
+        end
+      end
+    end
+    target = best
+  end
+end)
+local function getPing()
+  local stat = game:GetService("Stats"):FindFirstChild("PerformanceStats")
+  local ping = stat and stat:FindFirstChild("Ping")
+  return ping and math.clamp(ping:GetValue(),10,300)/1000 or 0.13
+end
+local function predict(part)
+  if not part then return end
+  local pos,vel = part.Position,part.AssemblyLinearVelocity
+  local dt = getgenv().Settings.Camlock["Predition Settings"]["Auto Predition"] and math.clamp(getPing()*((pos-ccam.CFrame.Position).Magnitude/50),0.05,0.4) or getgenv().Settings.Camlock["Predition Settings"].Predition
+  return pos+vel*dt
+end
+rs.RenderStepped:Connect(function()
+  if target then
+    local pos = predict(target)
+    if pos then
+      ccam.CFrame = CFrame.lookAt(ccam.CFrame.Position,pos)
+    end
+  end
+end)
