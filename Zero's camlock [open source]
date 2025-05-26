@@ -1,9 +1,9 @@
 getgenv().Settings = {
   Camlock = {
     ["Aim Part"] = "HumanoidRootPart",
-    ["Predition Settings"] = {
-      ["Auto Predition"] = true,
-      Predition = 0.1828
+    ["Prediction Settings"] = {
+      ["Auto Prediction"] = true,
+      Prediction = 0.1828
     },
   }
 }
@@ -77,7 +77,7 @@ end
 local function predict(part)
   if not part then return end
   local pos,vel = part.Position,part.AssemblyLinearVelocity
-  local dt = getgenv().Settings.Camlock["Predition Settings"]["Auto Predition"] and math.clamp(getPing()*((pos-ccam.CFrame.Position).Magnitude/50),0.05,0.4) or getgenv().Settings.Camlock["Predition Settings"].Predition
+  local dt = getgenv().Settings.Camlock["Prediction Settings"]["Auto Prediction"] and math.clamp(getPing()*((pos-ccam.CFrame.Position).Magnitude/50),0.05,0.4) or getgenv().Settings.Camlock["Prediction Settings"].Prediction
   return pos+vel*dt
 end
 rs.RenderStepped:Connect(function()
