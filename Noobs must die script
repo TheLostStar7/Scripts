@@ -1,0 +1,48 @@
+-- // Settings
+getgenv().Settings = {
+    Multiplier = 1, -- How Many Of Every Item In The Game You Want.
+    ["Kill All"] = false, -- Kills All The Mobs.
+    ["Revive All"] = false, -- Revives All The Players. NOT CODED YET.
+    ["High Health"] = false, -- Gives You Some Armor And Health And Regen Speed.
+    ["Server Crasher"] = false, -- Crashes Everyone In The Round. Or Server If You're Not In A Round.
+    ["Style Changer"] = "Telamon" -- Telamon, Icarus, DoomBringer.
+}
+-- // Do Not Mess Anything Down Here
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Zero Hub [Beta] Script!";Text = "Loading...";Duration = 5;})
+local start = tick()
+if not game:IsLoaded() then game.Loaded:Wait() end
+local time = tick()-start
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Zero Hub [BETA] Script!";Text = "Loaded! Time Taken To Load: "..string.format("%.2f",time).." Seconds.";Duration = 5;})
+for _ = 1,getgenv().Settings.Multiplier do
+    for _,v in ipairs(game:GetService("ReplicatedStorage").PlrMan.Items:GetChildren()) do
+        if v:IsA("Part") then
+            game:GetService("ReplicatedStorage").PlrMan.Items.PickupItem:FireServer(v.Name)
+        end
+    end
+end
+game:GetService("RunService").RenderStepped:Connect(function()
+    if getgenv().Settings["Kill All"] then
+        for _,v in ipairs(workspace.Enemies:GetChildren()) do
+            if v:IsA("Model") and v.Name ~= "Highlight" then
+                game:GetService("ReplicatedStorage").HurtEnemy:FireServer(v,math.huge)
+            end
+        end
+    end
+    if getgenv().Settings["Revive All"] then
+        
+    end
+end)
+if getgenv().Settings["High Health"] then
+    for _ = 1,500 do
+        game:GetService("ReplicatedStorage"):WaitForChild("PlrMan"):WaitForChild("Items"):WaitForChild("PickupItem"):FireServer("Armor")
+        game:GetService("ReplicatedStorage"):WaitForChild("PlrMan"):WaitForChild("Items"):WaitForChild("PickupItem"):FireServer("Chezburger")
+        game:GetService("ReplicatedStorage"):WaitForChild("PlrMan"):WaitForChild("Items"):WaitForChild("PickupItem"):FireServer("RegenCoil")
+    end
+end
+if getgenv().Settings["Server Crasher"] then
+    workspace.Bullets:Destroy()
+    local count = 0
+    local connection;connection = game:GetService("RunService").Stepped:Connect(function() if conut ~= 1e5 then game:GetService("ReplicatedStorage"):WaitForChild("PlrMan"):WaitForChild("Items"):WaitForChild("PickupItem"):FireServer("Windforce") else connection:Disconnect() connection = nil end end)
+end
+game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenUI"):WaitForChild("SetActiveFighter"):FireServer(tostring(getgenv().Settings["Style Changer"]))
+game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("ScreenUI"):WaitForChild("StartGame"):FireServer()
