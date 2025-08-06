@@ -10,27 +10,27 @@ local function notify(t,d) pcall(function() game:GetService("StarterGui"):SetCor
 local count = #game:GetService("Players"):GetPlayers()-1
 local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
+game:GetService("Players").LocalPlayer.CharacterAdded:Connect(function(c) char = c hrp = c:WaitForChild("HumanoidRootPart") end)
 notify(getgenv().Farm.ServerHop and count < 10 and "Searching For A Server..." or "Player Count: ["..tostring(count).."]",12)
 if getgenv().Farm.ServerHop and count < 10 then
     local tried = {}
     local function hop()
-        local res = req({Url = "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&limit=100",Method = "GET"})
-        local data = hs:JSONDecode(res.Body)
-        for _,server in ipairs(data.data) do
-            if server.playing < server.maxPlayers and server.id ~= game.JobId and not tried[server.id] then
-                tried[server.id] = true
-                local success,err = pcall(function()
-                    ts:TeleportToPlaceInstance(game.PlaceId,server.id)
-                end)
-                if not success then
-                    notify("Unable To Join That Server. Searching For Another Server.",12)
-                else
-                    return
+        while true do
+            local res = req({Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Desc&limit=100",Method = "GET"})
+            local data = hs:JSONDecode(res.Body)
+            for _,server in ipairs(data.data) do
+                if server.playing < server.maxPlayers and server.id ~= game.JobId and not tried[server.id] then
+                    tried[server.id] = true
+                    local success = pcall(function() ts:TeleportToPlaceInstance(game.PlaceId,server.id) end)
+                    if not success then
+                        notify("Unable To Join That Server. Searching For Another Server.",12)
+                    else
+                        return
+                    end
                 end
             end
+            task.wait(1)
         end
-        task.wait(1)
-        hop()
     end
     hop()
 else
@@ -40,29 +40,34 @@ else
     local function check() return current == "Dual" and "GeneralHit" or "b" end
     task.spawn(function()
         while getgenv().Farm.Enabled do
-            if game:GetService("Players").LocalPlayer:FindFirstChild("leaderstats") then
-                if game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Slaps") and game:GetService("Players").LocalPlayer.leaderstats.Slaps.Value >= 40 then
-                    if game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Glove") and game:GetService("Players").LocalPlayer.leaderstats.Glove.Value == "Dual" then
-                        current = "Dual"
-                    end
-                end
-                if current ~= last then
-                    last = current
-                    notify(last.." Has Been Equipped!",12)
-                    if char:FindFirstChild("isInArena") and char.isInArena == true then
-                        repeat game:GetService("Players").LocalPlayer:WaitForChild("Reset"):FireServer() until char.isInArena == false
-                        if last == "Dual" then
-                            fireclickdetector(workspace.Lobby.Dual.ClickDetector)
-                        else
-                            fireclickdetector(workspace.Lobby.Default.ClickDetector)
-                        end
-                    end
-                end
-            end
-            task.wait(1)
-        end
-    end)
+            if game:GetService("Players").LocalPlayer:FindFirstChild("leaderstats") and game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Slaps") and game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Glove") then
+                if game:GetService("Players").LocalPlayer.leaderstats.Slaps.Value >= 40 and game:GetService("Players").LocalPlayer.leaderstats.Glove.Value == "Dual" then
+                    current = "Dual"
+                else
+                    current = nil
+                end
+                if current ~= last or game:GetService("Players").LocalPlayer.leaderstats.Glove.Value ~= (last or "Default") then
+                    last = current
+                    if char:FindFirstChild("isInArena") and char.isInArena.Value == true then
+                        repeat
+                            game:GetService("Players").LocalPlayer:WaitForChild("Reset"):FireServer()
+                            task.wait(0.5)
+                        until not char:FindFirstChild("isInArena") or char.isInArena.Value == false
+                    end
+                    if current == "Dual" then
+                        fireclickdetector(workspace.Lobby.Dual.ClickDetector)
+                    else
+                        fireclickdetector(workspace.Lobby.Default.ClickDetector)
+                    end
+                end
+            end
+            task.wait(1)
+        end
+    end)
     while getgenv().Farm.Enabled do
+        repeat
+            task.wait(1)
+        until hrp and hrp.Parent
         if char:FindFirstChild("isInArena") and not char.isInArena.Value then
             firetouchinterest(hrp,workspace.Lobby.Teleport1.TouchInterest.Parent,0)
             firetouchinterest(hrp,workspace.Lobby.Teleport1.TouchInterest.Parent,1)
