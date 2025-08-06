@@ -1,0 +1,70 @@
+getgenv().Farm = {
+    Enabled = true,
+    ServerHop = true
+}
+repeat task.wait() until game:IsLoaded()
+local req = (syn and syn.request) or (http and http.request) or http_request or request
+local ts = game:GetService("TeleportService")
+local hs = game:GetService("HttpService")
+local function notify(t,d) pcall(function() game:GetService("StarterGui"):SetCore("SendNotification",{Title = "ZeroHub",Text = t,Icon = "rbxassetid://7733658504",Duration = d or 4}) end) end
+local count = #game:GetService("Players"):GetPlayers() - 1
+local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+notify(getgenv().Farm.ServerHop and count < 10 and "Searching For A Server..." or "Player Count: ["..tostring(count).."]",12)
+if getgenv().Farm.ServerHop and count < 10 then
+    local tried = {}
+    local function hop()
+        local res = req({Url = "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&limit=100",Method = "GET"})
+        local data = hs:JSONDecode(res.Body)
+        for _,server in ipairs(data.data) do
+            if server.playing < server.maxPlayers and server.id ~= game.JobId and not tried[server.id] then
+                tried[server.id] = true
+                local success,err = pcall(function()
+                    ts:TeleportToPlaceInstance(game.PlaceId,server.id)
+                end)
+                if not success then
+                    notify("Unable To Join That Server. Searching For Another Server.",12)
+                else
+                    return
+                end
+            end
+        end
+        task.wait(1)
+        hop()
+    end
+    hop()
+else
+    repeat task.wait() until char and hrp
+    local type
+    local function check() return type == "Dual" and "GeneralHit" or "b" end
+    while getgenv().Farm.Enabled do
+        if game:GetService("Players").LocalPlayer:FindFirstChild("leaderstats") then
+            if game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Slaps") and game:GetService("Players").LocalPlayer.leaderstats.Slaps.Value >= 40 then
+                if game:GetService("Players").LocalPlayer.leaderstats:FindFirstChild("Glove") and game:GetService("Players").LocalPlayer.leaderstats.Glove.Value ~= "Dual" then
+                    type = "Dual"
+                    fireclickdetector(workspace.Lobby.Dual.ClickDetector)
+                    notify("Dual Equipped!",5)
+                end
+            else
+                type = "Default"
+                fireclickdetector(workspace.Lobby.Default.ClickDetector)
+                notify("Default Equipped!",5)
+            end
+        end
+        if char:FindFirstChild("isInArena") and not char.isInArena.Value then firetouchinterest(hrp,workspace.Lobby.Teleport1.TouchInterest.Parent,0) firetouchinterest(hrp,workspace.Lobby.Teleport1.TouchInterest.Parent,1) notify("Entered.",5) end
+        for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+            if plr ~= game:GetService("Players").LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("isInArena") and plr.Character.isInArena.Value and not plr.Character:FindFirstChild("rock") then
+                hrp.Anchored = false
+                hrp.CFrame = plr.Character.HumanoidRootPart.CFrame+Vector3.new(0,3,0)
+                task.wait(.22)
+                game:GetService("ReplicatedStorage"):WaitForChild(check()):FireServer(plr.Character.HumanoidRootPart)
+                task.wait(.1)
+                hrp.CFrame = CFrame.new(1e5,1e5,1e5)
+                task.wait(.3)
+                hrp.Anchored = true
+                task.wait(1.8)
+            end
+        end
+        task.wait()
+    end
+end
