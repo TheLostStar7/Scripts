@@ -1,0 +1,66 @@
+local char = game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait()
+local rs = game:GetService("ReplicatedStorage")
+function Create(typestring,instance,props) local obj = typestring == "Instance.new" and Instance.new(instance) or typestring == "Drawing.new" and Drawing.new(instance) if not obj then return nil end for i,v in pairs(props or {}) do pcall(function() obj[i] = v end) end return obj end
+Create("Instance.new","Sound",{Parent = char,SoundId = "rbxassetid://1839997962",Volume = 1}):Play()
+game:FindFirstChild("StarterGui"):SetCore("SendNotification",{Title = "Credits",Text = "The Script Made By The Lost Star And The UI Is Inspired By DonjoSx UI",Duration = 20})
+local sg = Create("Instance.new","ScreenGui",{Parent = ((syn and syn.protect_gui(sg) or gethui and gethui()) or game:GetService("CoreGui")),Name = "Ability Gui",IgnoreGuiInset = true,ZIndexBehavior = Enum.ZIndexBehavior.Sibling})
+local f = Create("Instance.new","Frame",{Parent = sg,BackgroundColor3 = Color3.fromRGB(0,255,255),Position = UDim2.new(.5,0,.1,0),Size = UDim2.new(.58,0,.16,0),Active = true,Draggable = true})
+Create("Instance.new","UICorner",{Parent = f,CornerRadius = UDim.new(0,12)})
+local tbtn = Create("Instance.new","TextButton",{Parent = f,BackgroundColor3 = Color3.fromRGB(255,0,0),Position = UDim2.new(.935,0,.05,0),Size = UDim2.new(.055,0,.9,0),Text = "X",TextSize = 18}) tbtn.Activated:Connect(function() sg:Destroy() end)
+Create("Instance.new","UICorner",{Parent = tbtn,CornerRadius = UDim.new(0,12)})
+local f_ = Create("Instance.new","Frame",{Parent = f,BackgroundTransparency = 1,Position = UDim2.new(.08,0,.05,0),Size = UDim2.new(.83,0,.9,0),ClipsDescendants = true})
+Create("Instance.new","UIListLayout",{Parent = f_,Padding = UDim.new(0,4),FillDirection = Enum.FillDirection.Horizontal,VerticalAlignment = Enum.VerticalAlignment.Center})
+local function btn(title,callback,options)
+    local button = Create("Instance.new","TextButton",{Parent = f_,BackgroundColor3 = Color3.fromRGB(255,255,255),Size = UDim2.new(.12,0,.8,0),Text = title,TextScaled = true,TextWrapped = true,BorderSizePixel = 2,BorderColor3 = Color3.new(1,1,1)})
+    Create("Instance.new","UICorner",{Parent = button,CornerRadius = UDim.new(0,8)})
+    if options and #options > 0 then
+        local f_0 = Create("Instance.new","Frame",{Parent = sg,BackgroundColor3 = Color3.fromRGB(0,255,255),Position = UDim2.new(0,0,.1,0),Size = UDim2.new(.4,0,.15,0),Active = true,Draggable = true,Visible = false})
+        Create("Instance.new","UICorner",{Parent = f_0,CornerRadius = UDim.new(0,12)})
+        Create("Instance.new","UIPadding",{Parent = f_0,PaddingRight = UDim.new(0,12),PaddingLeft = UDim.new(0,12)})
+        Create("Instance.new","UIListLayout",{Parent = f_0,Padding = UDim.new(0,4),FillDirection = Enum.FillDirection.Horizontal,VerticalAlignment = Enum.VerticalAlignment.Center})
+        for i,option in ipairs(options) do
+            local button_ = Create("Instance.new","TextButton",{Parent = f_0,BackgroundColor3 = Color3.fromRGB(255,255,255),Size = UDim2.new(.16,0,.8,0),Text = option,TextScaled = true,TextWrapped = true,BorderSizePixel = 2,BorderColor3 = Color3.new(1,1,1)})
+            Create("Instance.new","UICorner",{Parent = button_,CornerRadius = UDim.new(0,8)})
+            button_.Activated:Connect(function() callback(option) end)
+        end
+        button.Activated:Connect(function() f_0.Visible = not f_0.Visible end)
+    else
+        button.Activated:Connect(callback)
+    end
+end
+local function fish()
+    local vector = game:GetService("Workspace").CurrentCamera.CFrame.LookVector
+    local direction = Vector3.new(vector.X,0,vector.Z).Unit
+    direction = direction+(Vector3.new(0,1,0)*0.5)
+    rs:WaitForChild("SelfKnockback"):FireServer({["Force"] = 90,["Direction"] = direction})
+end
+btn("Fish",fish)
+btn("Retro",function(v)
+    if v == "Hammer" then
+        rs.RetroAbility:FireServer("Ban Hammer")
+    elseif v == "Rocket" then
+        rs.RetroAbility:FireServer("Rocket Launcher")
+    elseif v == "Bomb" then
+        rs.RetroAbility:FireServer("Bomb")
+    end
+end,{"Hammer","Rocket","Bomb"})
+btn("Admin",function(v)
+    if v == "Fling" then
+        rs.AdminAbility:FireServer("Fling")
+    elseif v == "Anvil" then
+        rs.AdminAbility:FireServer("Anvil")
+    elseif v == "Invisibility" then
+        rs.AdminAbility:FireServer("Invisibility")
+    end
+end,{"Fling","Anvil","Invisibility"})
+btn("Dave",function(v)
+    if v == "Init" then
+        rs.Events:WaitForChild("Dave"):FireServer("init")
+    elseif v == "Smash" then
+        rs.Events:WaitForChild("Dave"):FireServer("smash")
+    elseif v == "Summon" then
+        rs.Events:WaitForChild("Dave"):FireServer("summon")
+    elseif v == "Hammer" then
+        rs.Events:WaitForChild("Dave"):FireServer("hammer",workspace:WaitForChild("Nails"):WaitForChild("nail"))
+    end
+end,{"Init","Smash","Summon","Hammer"})
