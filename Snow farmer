@@ -1,0 +1,23 @@
+local hrp = game:GetService("Players").LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+local target
+for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+    if plr ~= game:GetService("Players").LocalPlayer and plr.Character and plr.Character:FindFirstChild("isInArena") and plr.Character.isInArena.Value and not plr.Character:FindFirstChild("rock") then
+        target = plr
+        break
+    end
+end
+local thrp = target.Character:WaitForChild("HumanoidRootPart")
+local rs = game:GetService("ReplicatedStorage")
+local hit = rs:WaitForChild("SnowHit")
+local function spam(path)
+    task.spawn(function()
+        while true do
+            hit:FireServer(path)
+            task.wait(.005)
+        end
+    end)
+end
+repeat task.wait()
+    hrp.CFrame = thrp.CFrame
+    spam(thrp)
+until false
